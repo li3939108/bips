@@ -31,10 +31,12 @@ After a voluntary split, the blockchain splits into two independent subsequent b
                                                  -------
 </pre>
 
-After several splits, the original blockchain would split into many subsequent blockchains. The leaf blockchain can be defined to be one blockchain with no sub-chains at one point. All blocks should only be appended to leaf blockchain. A sequence number can be included into a transaction, meaning the transaction should only be valid for the corresponding blockchain, if itself is a leaf blockchain, or its subsequent leaf blockchains. If there is no sequence number, the transaction would be valid for all leaf blockchain(s).
+After several splits, the original blockchain would split into many subsequent blockchains. Then the leaf blockchain can be defined as one blockchain with no sub-chains at one point. All blocks should only be appended to a leaf blockchain. A sequence number can be included into a transaction, meaning the transaction should only be valid for the corresponding blockchain, if itself is a leaf blockchain, or its subsequent leaf blockchains. If there is no sequence number, the transaction would be valid for all leaf blockchain(s).
 
 ===Matching Criteria for Transaction Sequence Numbers===
-One transaction sequence number (tseq) matches the block sequence number (bseq), if and only if the tseq is a prefix of the bseq. For example, tseq 01 matches bseq 01, bseq 011 and bseq 010, but tseq 01 doesn't match bseq 00 and bseq 0.
+One transaction sequence number (tseq) matches the block sequence number (bseq), if and only if the tseq is a prefix of the bseq. For example, tseq 01 matches bseq 01, bseq 011 and bseq 010, but tseq 01 doesn't match bseq 00 and bseq 0. Empty tseq should matches any bseq.
+
+The wallet should adjust the amount for one unspent transaction output (UTXO), according to the number of bits of the tseq. For instance, if there are two bits of tseq, the amount should be divided by 4, or the binary point be moved two bits left.
 ==Rationale==
 If the two subsequent blockchains after one split have the same protocols except the sequence numbers. They have no reason to have different value.
 ==Compatibility==
