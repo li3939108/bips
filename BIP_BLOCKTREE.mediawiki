@@ -35,7 +35,7 @@ After several splits, the original blockchain would split into many subsequent b
 
 ===Matching Criteria for Transaction Sequence Numbers===
 One transaction sequence number (tseq) matches the block sequence number (bseq), if and only if the tseq is a prefix of the bseq. For example, tseq 01 matches bseq 01, bseq 011 and bseq 010, but tseq 01 doesn't match bseq 00 and bseq 0. Empty tseq should matches any bseq.
-
+===Amount Adjustment===
 The wallet should adjust the amount for one unspent transaction output (UTXO), according to the number of bits of the tseq. For instance, if there are two bits of tseq, the amount should be divided by 4, or the binary point be moved two bits left.
 ==Rationale==
 If the two subsequent blockchains after one split have the same protocols except the sequence numbers. They have no reason to have different value.
