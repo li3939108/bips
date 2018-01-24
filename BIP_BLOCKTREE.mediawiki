@@ -1,0 +1,46 @@
+<pre>
+  BIP:              N/A
+  Layer:            Consensus (hard fork)
+  Title:            Blocktree: A Scaling Scheme for Blockchains
+  Author:           Chaofan Li <chaof@tamu.edu>
+  Discussions-To:   bitcoin-dev <bitcoin-dev@lists.linuxfoundation.org>
+  Comments-Summary: No comments yet.
+  Comments-URI:     N/A
+  Status:           Draft
+  Type:             Standards Track
+  Created:          2018-01-24
+  License:          CC-BY-4.0
+</pre>
+
+==Abstract==
+==Motivation==
+Many scaling plans and proposals for the capacity of bitcoin have been proposed in past several years. In 2017, The scaling problem has become a major drawback for blockchains, causing congestions and increasing transaction fees for both bitcoin and ethereum, two largest blockchain systems in terms of market capitalizations of their coins or tokens.
+
+Several BIPs have proposed to increase the size of blocks or adjust the block size such as BIP 101, 102, 103, 105, 106 and 107, which would increase the transaction capacity of bitcoin blockchain if deployed. After the segwit was deployed, the block size limit was increased to up to 4MB.
+==Specification==
+After a voluntary split, the blockchain splits into two independent subsequent blockchains (sub-chains). One subsequent blockchain can also split into two independent subsequent blockchains later. The subsequent blockchains of blockchain A are defined to be all the sub-chains split from blockchain A. Except the original blockchain, every blocks in subsequent blockchains of the original one should include a sequence number, to identify the block is for that chain only. One example of such sequence numbers is shown below:
+<pre>                               
+                                                 -------
+                         ------       ---------<-|00|tx|<-... 
+---------       -------<-|0|tx|<-...<-|0|Split|  -------  
+|Genesis|       |Split|  ------       ---------<-|01|tx|<-...
+|       |<-...<-|     |                          -------
+|block  |       |point|  ------       ---------<-|10|tx|<-...
+---------       -------<-|1|tx|<-...<-|1|Split|  -------
+                         ------       ---------<-|11|tx|<-...
+                                                 -------
+</pre>
+
+After several splits, the original blockchain would split into many subsequent blockchains. The leaf blockchain can be defined to be one blockchain with no sub-chains at one point. All blocks should only be appended to leaf blockchain. A sequence number can be included into a transaction, meaning the transaction should only be valid for the corresponding blockchain, if itself is a leaf blockchain, or its subsequent leaf blockchains. If there is no sequence number, the transaction would be valid for all leaf blockchain(s).
+
+===Matching Criteria for Transaction Sequence Numbers===
+One transaction sequence number (tseq) matches the block sequence number (bseq), if and only if the tseq is a prefix of the bseq. For example, tseq 01 matches bseq 01, bseq 011 and bseq 010, but tseq 01 doesn't match bseq 00 and bseq 0.
+==Rationale==
+If the two subsequent blockchains after one split have the same protocols except the sequence numbers. They have no reason to have different value.
+==Compatibility==
+It is backward-compatible with older versions of transactions, but not compatible with older versions of wallets. The older-version wallet might display wrong balance for an address, but it is still able to send acceptable transactions.
+
+It is not backward-compatible with older versions of nodes. All nodes should upgrade to reject blocks with no matching sequence number for one leaf blockchain. They also need to check all the transactions in one block has matching sequence number with the block sequence number, with above-specified matching criteria. The nodes could also split into several different versions to verify part of the leaf blockchains only.
+==Deployment==
+
+
