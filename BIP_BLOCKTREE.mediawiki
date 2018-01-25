@@ -31,6 +31,7 @@ After a voluntary split, the blockchain splits into two independent subsequent b
                          ------       ---------<-|11|tx|<-...
                                                  -------
 </pre>
+To avoid imbalance, it is better to always binary-split all the leaf blockchains.
 
 After several splits, the original blockchain would split into many subsequent blockchains. Then the leaf blockchain can be defined as one blockchain with no sub-chains at one point. All blocks should only be appended to a leaf blockchain. A transaction batch number (tbt) can be included into a transaction, meaning the transaction should only be valid for the corresponding blockchain, if itself is a leaf blockchain, or its subsequent leaf blockchains. If there is no batch number, the transaction would be valid for all leaf blockchain(s). Miners should only broadcast valid blocks with bbt same as one of the leaf blockchains, and only include valid transactions that have matching tbt with the bbt of the block to broadcast. All blocks with invalid bbt or invalid transactions should be rejected by all nodes.
 
@@ -44,6 +45,10 @@ Practically, the node would probably have several independent child processes or
 After amount adjustment, the total BTC balance amount would be the sum of all the adjusted amount of UTXO for the address.
 ==Rationale==
 If the two subsequent blockchains after one split have the same protocols except the batch numbers. They have no reason to have different value. After split, addresses are valid on all sub-chains. For micropayments without exceeding the max balance for any one leaf blockchain, the transactions would only need to use one leaf blockchain. As long as the receiver has the private key, he/she can always get and spend the bitcoins sent to the address regardless of which leaf blockchain it is included in. The users won't perceive the difference if most wallets and exchanges only show the total balance amount rather than balances for every leaf blockchains. Also, if the wallets randomly select a leaf blockchain to send transactions, as long as the balance is enough, the transactions would be evenly distributed amoung all the leaf blockchains.
+
+If the bitcoin on every leaf blockchains have the same value initially. Miners are also most likely to be  equally distributed among all the leaf blockchains. If one chain is faster, according to the difficulty adjustment scheme, it would become more difficult to mine. The leaf blockchains are likely to have similar block generation rates with similar difficulty and similar length. Otherwise, the miners would be attracted to the leaf blockchain easier to mine, and more miners will make the block generation rate increase and then, after difficulty adjustment, harder to mine. Equilibrium will be achieved.
+
+
 ==Compatibility==
 It is backward-compatible with older versions of transactions, but not compatible with older versions of wallets. The older-version wallet might display wrong balance for an address, but it is still able to send acceptable transactions.
 
