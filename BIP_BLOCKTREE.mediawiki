@@ -56,4 +56,5 @@ It is backward-compatible with older versions of transactions, but not compatibl
 
 It is not backward-compatible with older versions of nodes. All nodes should upgrade to reject blocks with no matching batch number for one leaf blockchain. They also need to check all the transactions in one block has matching batch number with the block batch number, with above-specified matching criteria. The nodes could also split into several different versions to verify part of the leaf blockchains only.
 
-
+==Implementation and Deployment==
+The version number of blocks and transactions could be good options to store the batch numbers of blocks and transactions.
