@@ -13,13 +13,13 @@
 </pre>
 
 ==Abstract==
-This proposal aims to increase the transaction capacity of bitcoin, by splitting the bitcoin blockchain into two or more blockchains with almost the same protocol. Theoretically, the transactions capacity would double because of double block generation rate, after one split. 
+This proposal aims to increase the transaction capacity of bitcoin, by splitting the bitcoin blockchain into two or more blockchains with almost the same protocol. Theoretically, the transactions capacity would double because of double block generation rate, after one split. Several such binary split would make the original blockchain evolve into an almost balanced block-tree.
 ==Motivation==
 Many scaling plans and proposals for the capacity of bitcoin have been proposed in past several years. In 2017, The scaling problem has become a major drawback for blockchains, causing congestions and increasing transaction fees for both bitcoin and ethereum, two largest blockchain systems in terms of market capitalizations.
 
 Several BIPs have proposed to increase the size of blocks or adjust the block size such as BIP 101, 102, 103, 105, 106 and 107, which would increase the transaction capacity of bitcoin blockchain if deployed. After the segwit was deployed, the block size limit was increased to up to 4MB. However, some people believe it is not enough and performed a hard fork resulting in a new cryptocurrency, Bitcoin Cash (BCH), with 8MB block size limit. 
 
-The main drawback of large block size might be the network bandwidth overhead. It is harder for nodes to synchronize with other nodes for larger blocks. So, I propose a new scaling scheme with no need to increase block size: voluntarily split the original blockchain into two independent blockchains, and possibly split more times.
+The main drawback of large block size might be the network bandwidth overhead. It is harder for nodes to synchronize with other nodes for larger blocks (e.g. 1GB block). So, I propose a new scaling scheme with no need to increase block size: voluntarily split the original blockchain into two independent blockchains, and possibly split more times. 
 ==Specification==
 After a voluntary split, the blockchain splits into two independent subsequent blockchains (sub-chains). One subsequent blockchain can also split into two independent subsequent blockchains later. The subsequent blockchains of blockchain A are defined to be all the sub-chains split from blockchain A. Except the original blockchain, every blocks in subsequent blockchains of the original one should include a block batch number (bbt), to identify the block is for that chain only. One example of such block batch numbers is shown below:
 <pre>                               
@@ -57,4 +57,4 @@ It is backward-compatible with older versions of transactions, but not compatibl
 It is not backward-compatible with older versions of nodes. All nodes should upgrade to reject blocks with no matching batch number for one leaf blockchain. They also need to check all the transactions in one block has matching batch number with the block batch number, with above-specified matching criteria. The nodes could also split into several different versions to verify part of the leaf blockchains only.
 
 ==Implementation and Deployment==
-The version number of blocks and transactions could be good options to store the batch numbers of blocks and transactions.
+The version number of blocks and transactions could be good options to store the batch numbers of blocks and transactions. 
