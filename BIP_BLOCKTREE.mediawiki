@@ -43,7 +43,7 @@ Practically, the node would probably have several independent child processes or
 
 After amount adjustment, the total BTC balance amount would be the sum of all the adjusted amount of UTXO for the address.
 ==Rationale==
-If the two subsequent blockchains after one split have the same protocols except the batch numbers. They have no reason to have different value. After split, addresses are valid on all sub-chains. For micropayments, the transactions would only need to use one leaf blockchain. 
+If the two subsequent blockchains after one split have the same protocols except the batch numbers. They have no reason to have different value. After split, addresses are valid on all sub-chains. For micropayments without exceeding the max balance for any one leaf blockchain, the transactions would only need to use one leaf blockchain. As long as the receiver has the private key, he/she can always get and spend the bitcoins sent to the address regardless of which leaf blockchain it is included in. The users won't perceive the difference if most wallets and exchanges only show the total balance amount rather than balances for every leaf blockchains. Also, if the wallets randomly select a leaf blockchain to send transactions, as long as the balance is enough, the transactions would be evenly distributed amoung all the leaf blockchains.
 ==Compatibility==
 It is backward-compatible with older versions of transactions, but not compatible with older versions of wallets. The older-version wallet might display wrong balance for an address, but it is still able to send acceptable transactions.
 
