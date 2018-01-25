@@ -13,12 +13,13 @@
 </pre>
 
 ==Abstract==
+This proposal aims to increase the transaction capacity of bitcoin, by splitting the bitcoin blockchain into two or more blockchains with almost the same protocol. Theoretically, the transactions capacity would double because of double block generation rate, after one split. 
 ==Motivation==
 Many scaling plans and proposals for the capacity of bitcoin have been proposed in past several years. In 2017, The scaling problem has become a major drawback for blockchains, causing congestions and increasing transaction fees for both bitcoin and ethereum, two largest blockchain systems in terms of market capitalizations of their coins or tokens.
 
 Several BIPs have proposed to increase the size of blocks or adjust the block size such as BIP 101, 102, 103, 105, 106 and 107, which would increase the transaction capacity of bitcoin blockchain if deployed. After the segwit was deployed, the block size limit was increased to up to 4MB.
 ==Specification==
-After a voluntary split, the blockchain splits into two independent subsequent blockchains (sub-chains). One subsequent blockchain can also split into two independent subsequent blockchains later. The subsequent blockchains of blockchain A are defined to be all the sub-chains split from blockchain A. Except the original blockchain, every blocks in subsequent blockchains of the original one should include a sequence number, to identify the block is for that chain only. One example of such sequence numbers is shown below:
+After a voluntary split, the blockchain splits into two independent subsequent blockchains (sub-chains). One subsequent blockchain can also split into two independent subsequent blockchains later. The subsequent blockchains of blockchain A are defined to be all the sub-chains split from blockchain A. Except the original blockchain, every blocks in subsequent blockchains of the original one should include a block batch number (bbt), to identify the block is for that chain only. One example of such block batch numbers is shown below:
 <pre>                               
                                                  -------
                          ------       ---------<-|00|tx|<-... 
@@ -31,18 +32,17 @@ After a voluntary split, the blockchain splits into two independent subsequent b
                                                  -------
 </pre>
 
-After several splits, the original blockchain would split into many subsequent blockchains. Then the leaf blockchain can be defined as one blockchain with no sub-chains at one point. All blocks should only be appended to a leaf blockchain. A sequence number can be included into a transaction, meaning the transaction should only be valid for the corresponding blockchain, if itself is a leaf blockchain, or its subsequent leaf blockchains. If there is no sequence number, the transaction would be valid for all leaf blockchain(s). Miners should only broadcast valid blocks with bseq same as one of the leaf blockchains, and only include valid transactions that have matching tseq with the bseq of the block to broadcast. All blocks with invalid bseq or invalid transactions should be rejected by nodes.
+After several splits, the original blockchain would split into many subsequent blockchains. Then the leaf blockchain can be defined as one blockchain with no sub-chains at one point. All blocks should only be appended to a leaf blockchain. A transaction batch number (tbt) can be included into a transaction, meaning the transaction should only be valid for the corresponding blockchain, if itself is a leaf blockchain, or its subsequent leaf blockchains. If there is no batch number, the transaction would be valid for all leaf blockchain(s). Miners should only broadcast valid blocks with bbt same as one of the leaf blockchains, and only include valid transactions that have matching tbt with the bbt of the block to broadcast. All blocks with invalid bbt or invalid transactions should be rejected by all nodes.
 
 ===Matching Criteria for Transaction Sequence Numbers===
-One transaction sequence number (tseq) matches the block sequence number (bseq), if and only if the tseq is a prefix of the bseq. For example, tseq 01 matches bseq 01, bseq 011 and bseq 010, but tseq 01 doesn't match bseq 00 and bseq 0. Empty tseq should matches any bseq.
+One transaction batch number (tbt) matches the block batch number (bbt), if and only if the tbt is a prefix of the bbt. For example, tbt 01 matches bbt 01, bbt 011 and bbt 010, but tbt 01 doesn't match bbt 00 and bbt 0. Empty tbt matches any bbt.
 ===Amount Adjustment===
-The wallet should adjust the amount for one unspent transaction output (UTXO), according to the number of bits of the tseq. For instance, if there are two bits of tseq, the amount should be divided by 4, or the binary point be moved two bits left.
+The wallet should adjust the amount for one unspent transaction output (UTXO), according to the number of bits of the bbt. For instance, if there are two bits of bbt for the block containing the transaction, the amount should be divided by 4, or the binary point be moved two bits left.  Practically, the nodes would probably have several independent child processes or threads corresponding to every leaf blockchains with independent global UTXO databases, which contain all the UTXO with tbt matching the bbt of the leaf blockchain (UTXO included in its precedent blockchains. e.g., the UTXO in original blockchain would be in every leaf blockchains' global UTXO). Then, the amount adjustment is even simpler. All the amounts of UTXO in a global UTXO of an independent node process corresponding to a leaf blockchain would be divided according to the leaf blockchain's bbt.
 ==Rationale==
-If the two subsequent blockchains after one split have the same protocols except the sequence numbers. They have no reason to have different value.
+If the two subsequent blockchains after one split have the same protocols except the batch numbers. They have no reason to have different value. After split, addresses are valid on all sub-chains. For micropayments, the transactions would only need to use one leaf blockchain. 
 ==Compatibility==
 It is backward-compatible with older versions of transactions, but not compatible with older versions of wallets. The older-version wallet might display wrong balance for an address, but it is still able to send acceptable transactions.
 
-It is not backward-compatible with older versions of nodes. All nodes should upgrade to reject blocks with no matching sequence number for one leaf blockchain. They also need to check all the transactions in one block has matching sequence number with the block sequence number, with above-specified matching criteria. The nodes could also split into several different versions to verify part of the leaf blockchains only.
-==Deployment==
+It is not backward-compatible with older versions of nodes. All nodes should upgrade to reject blocks with no matching batch number for one leaf blockchain. They also need to check all the transactions in one block has matching batch number with the block batch number, with above-specified matching criteria. The nodes could also split into several different versions to verify part of the leaf blockchains only.
 
 
