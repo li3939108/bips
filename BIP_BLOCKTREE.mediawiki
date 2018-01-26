@@ -13,7 +13,7 @@
 </pre>
 
 ==Abstract==
-This proposal aims to increase the transaction capacity of Bitcoin, by splitting the Bitcoin blockchain into two or more blockchains with almost the same protocol. Theoretically, the transactions capacity would double because of double block generation rate, after one split. Several such binary splits would make the original blockchain evolve into an almost balanced block-tree.
+This proposal aims to increase the transaction capacity of Bitcoin, by splitting the Bitcoin blockchain into two or more blockchains with almost the same protocol. Theoretically, the transactions capacity would double because of double block generation rate after one split. Several such binary splits would make the original blockchain evolve into an almost balanced block-tree.
 ==Motivation==
 Many scaling plans and proposals for the capacity of Bitcoin have been proposed in past several years. In 2017, The scaling problem has become a major drawback for blockchains, causing congestions and increasing transaction fees for both Bitcoin and Ethereum, two largest blockchain systems in terms of market capitalizations.
 
