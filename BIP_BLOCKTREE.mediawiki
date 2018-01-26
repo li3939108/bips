@@ -19,7 +19,7 @@ Many scaling plans and proposals for the capacity of Bitcoin have been proposed 
 
 Several BIPs have been proposed to increase the size of blocks or adjust the block size such as BIP 101, 102, 103, 105, 106 and 107, which would increase the transaction capacity of Bitcoin blockchain if deployed. After the segwit was deployed, the block size limit was increased  up to 4MB. However, some people believe it is not enough and performed a hard fork resulting in a new cryptocurrency, Bitcoin Cash (BCH), with 8MB block size limit. 
 
-The main drawback of large block size might be the network bandwidth overhead. It is harder for nodes to synchronize with other nodes for larger blocks (e.g. 1GB block). So, I propose a new scaling scheme with no need to increase block size: voluntarily split the original blockchain into two independent blockchains, and possibly split more times. 
+The main drawback of large block size might be the network bandwidth overhead. It is harder for nodes to synchronize with other nodes for larger blocks (e.g. 1GB block). So, I propose a new scaling scheme with no need to increase block size: voluntarily split the original blockchain into two independent blockchains, and possibly split more times. A similar idea of tree-chains has been proposed in 2014 [1], however, the tree-chain proposal complicate the problem trying to do inter-chain communication.
 ==Specification==
 After a voluntary split, the blockchain splits into two independent subsequent blockchains (sub-chains). One subsequent blockchain can also split into two independent subsequent blockchains later. The subsequent blockchains of blockchain A are defined to be all the sub-chains split from blockchain A. Except the original blockchain, every blocks in subsequent blockchains of the original one should include a block batch number (bbt), to identify the block is for that chain only. One example of such block batch numbers is shown below:
 <pre>                               
@@ -58,3 +58,5 @@ It is not backward-compatible with older versions of nodes. All nodes should upg
 
 ==Implementation and Deployment==
 The version number of blocks and transactions could be good options to store the batch numbers. If the lower 8 bits were used to represent the batch number, the batch number could follow a 1. E.g. batch number 00 would be 0000_0100, 01 be 0000_0101, and empty batch number be 0000_0001. Seven splits would be possible if 8 bits were reserved for the batch number.
+==References==
+[1] Peter Todd. Re: [Bitcoin-development] Tree-chains preliminary summary. March 2014. http://diyhpl.us/~bryan/papers2/bitcoin/tree-chains-preliminary.pdf
